@@ -5,7 +5,7 @@ const uiStore = useUIStore();
 </script>
 
 <template>
-  <header class="bg-blue-600 text-white p-4 shadow-md z-40">
+  <header class="relative text-white p-4 shadow-md z-40">
     <div class="container mx-auto flex justify-between items-center">
       <button
         @click="uiStore.toggleSidebar"

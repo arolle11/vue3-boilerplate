@@ -14,7 +14,7 @@ const closeSidebar = () => {
 
 <template>
   <aside
-    class="bg-gray-800 text-white w-64 fixed md:static h-full transition-all duration-300 z-1000"
+    class="absolute bg-gray-800 text-white w-64 md:static h-full transition-all duration-300 z-1000"
     :class="{
       '-translate-x-full md:translate-x-0': !uiStore.isSidebarOpen,
       'translate-x-0': uiStore.isSidebarOpen,

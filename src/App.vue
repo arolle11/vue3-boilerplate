@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen flex flex-col relative">
+  <div class="min-h-screen flex flex-col">
     <AppHeader />
-    <div class="flex flex-1 relative">
+    <div class="flex flex-1">
       <AppSidebar />
       <div
         v-if="uiStore.isSidebarOpen"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+        class="inset-0 bg-black bg-opacity-50 z-40 md:hidden"
         @click="uiStore.toggleSidebar"
       ></div>
       <main class="flex-1 p-4 bg-gray-50">
