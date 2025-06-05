@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div
     v-if="uiStore.isSidebarOpen"
     class="inset-0 bg-black bg-opacity-50 z-40 md:hidden"
@@ -21,4 +21,21 @@ import AppSidebar from "@/components/layout/AppSidebar.vue";
 import { useUIStore } from "@/stores/ui";
 
 const uiStore = useUIStore();
+</script> -->
+<template>
+  <component :is="layoutComponent">
+    <RouterView />
+  </component>
+</template>
+
+<script setup lang="ts">
+import DefaultLayout from "@/components/layout/DefaultLayout.vue";
+import BlankLayout from "@/components/layout/BlankLayout.vue";
+import { useRoute } from "vue-router";
+import { computed } from "vue";
+
+const route = useRoute();
+const layoutComponent = computed(() => {
+  return route.meta.layout === "blank" ? BlankLayout : DefaultLayout;
+});
 </script>

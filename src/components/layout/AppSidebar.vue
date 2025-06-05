@@ -16,7 +16,7 @@
     </div>
 
     <nav @click="closeSidebar" class="space-y-6">
-      <ul class="space-y-4 mt-6 text-[#273240]">
+      <ul class="space-y-4 mt-12 text-[#273240]">
         <span class="">MENU</span>
         <li class="mt-4">
           <RouterLink
