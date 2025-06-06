@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "My Vue Boilerplate",
+    "description": "Vue 3 Boilerplate with Vite, Tailwind CSS, Pinia and TypeScript"
+  },
+  "auth": {
+    "login": {
+      "title": "Login to your account"
+    },
+    "register": {
+      "title": "Create a new account"
+    },
+    "home": {
+      "title": "Home"
+    },
+    "settings": {
+      "title": "Settings"
+    }
+  }
+}

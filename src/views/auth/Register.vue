@@ -32,10 +32,13 @@
         <p class="text-xs text-[#273240] mt-4">
           Enter your details to register.
         </p>
-        <form class="flex flex-col items-center w-1/2 max-sm:w-full">
+        <form
+          class="flex flex-col items-center w-1/2 max-sm:w-full"
+          @submit.prevent="handleRegister"
+        >
           <div class="w-full mt-8">
             <label
-              for="input-group-1"
+              for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >Full Name*</label
             >
@@ -47,14 +50,19 @@
               </div>
               <input
                 type="text"
+                id="name"
+                v-model="form.name"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="arolle fona"
               />
             </div>
+            <p v-if="errors.name" class="text-xs text-red-500 mt-1">
+              {{ errors.name }}
+            </p>
           </div>
           <div class="w-full">
             <label
-              for="input-group-1"
+              for="email"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >Email*</label
             >
@@ -66,14 +74,19 @@
               </div>
               <input
                 type="text"
+                id="email"
+                v-model="form.email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="arollefona11@gmail.com"
               />
             </div>
+            <p v-if="errors.email" class="text-xs text-red-500 mt-1">
+              {{ errors.email }}
+            </p>
           </div>
           <div class="w-full">
             <label
-              for="input-group-1"
+              for="password"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >Password*</label
             >
@@ -82,7 +95,9 @@
                 <LockKeyhole class="text-gray-900 w-4 h-4" />
               </div>
               <input
+                id="password"
                 :type="showPassword ? 'text' : 'password'"
+                v-model="form.password"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="........"
               />
@@ -94,24 +109,35 @@
                 <Eye v-else class="text-gray-900 w-4 h-4" />
               </div>
             </div>
+            <p v-if="errors.password" class="text-xs text-red-500 mt-1">
+              {{ errors.password }}
+            </p>
           </div>
           <div class="flex items-center w-full gap-2">
             <input
-              id="default-checkbox"
+              id="terms"
               type="checkbox"
-              value=""
+              v-model="form.terms"
               class="w-4 h-4 text-[#5A67BA] bg-gray-100 border-gray-300 rounded-sm outline-none"
             />
-            <label for="default-checkbox" class="text-xs text-[#273240]"
-              >Remember Me</label
+            <label for="terms" class="text-xs text-[#273240]"
+              >I agree to the Terms and Conditions</label
             >
           </div>
+          <p v-if="errors.terms" class="text-xs text-red-500 w-full mt-1">
+            {{ errors.terms }}
+          </p>
           <button
             type="submit"
             class="bg-[#5A67BA] w-full px-4 py-2 rounded text-white mt-8"
+            :disabled="isSubmitting"
           >
-            Create an account
+            <span v-if="isSubmitting">Creating account...</span>
+            <span v-else>Create an account</span>
           </button>
+          <p v-if="registerError" class="text-xs text-red-500 mt-2">
+            {{ registerError }}
+          </p>
         </form>
       </div>
       <div
@@ -154,9 +180,86 @@ import {
   EyeOff,
 } from "lucide-vue-next";
 import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
+
+const authStore = useAuthStore();
+const router = useRouter();
+
 const showPassword = ref(false);
+const isSubmitting = ref(false);
+const registerError = ref("");
+
+const form = ref({
+  name: "",
+  email: "",
+  password: "",
+  terms: false,
+});
+
+const errors = ref({
+  name: "",
+  email: "",
+  password: "",
+  terms: "",
+});
 
 const togglePassword = () => {
   showPassword.value = !showPassword.value;
+};
+
+const validateForm = () => {
+  let isValid = true;
+  errors.value = { name: "", email: "", password: "", terms: "" };
+
+  if (!form.value.name) {
+    errors.value.name = "Full name is required";
+    isValid = false;
+  }
+
+  if (!form.value.email) {
+    errors.value.email = "Email is required";
+    isValid = false;
+  } else if (!/^\S+@\S+\.\S+$/.test(form.value.email)) {
+    errors.value.email = "Please enter a valid email";
+    isValid = false;
+  }
+
+  if (!form.value.password) {
+    errors.value.password = "Password is required";
+    isValid = false;
+  } else if (form.value.password.length < 6) {
+    errors.value.password = "Password must be at least 6 characters";
+    isValid = false;
+  }
+
+  if (!form.value.terms) {
+    errors.value.terms = "You must accept the terms and conditions";
+    isValid = false;
+  }
+
+  return isValid;
+};
+
+const handleRegister = async () => {
+  if (!validateForm()) return;
+
+  isSubmitting.value = true;
+  registerError.value = "";
+
+  try {
+    const emailExists = authStore.demoUsers.some(
+      (user) => user.email === form.value.email
+    );
+    if (emailExists) {
+      registerError.value = "Email already registered";
+      return;
+    }
+
+    authStore.register(form.value.name, form.value.email, form.value.password);
+    router.push("/");
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>

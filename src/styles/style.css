@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+.router-link-active,
+.router-link-exact-active {
+  background-color: #e3e7f4;
+  color: #707fdd;
+}

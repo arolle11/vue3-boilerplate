@@ -19,33 +19,33 @@
       <ul class="space-y-4 mt-12 text-[#273240]">
         <span class="">MENU</span>
         <li class="mt-4">
-          <RouterLink
-            to="/"
-            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
+          <router-link
+            to="/home"
+            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2 router-link-active:bg-[#e3e7f4] router-link-active:text-[#707FDD]"
           >
-            <LayoutDashboard class="w-6 h-6" />Dashboard</RouterLink
-          >
-        </li>
-        <li>
-          <RouterLink
-            to="/"
-            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-          >
-            <ShoppingCart class="w-6 h-6" />Food Order</RouterLink
+            <LayoutDashboard class="w-6 h-6" />Dashboard</router-link
           >
         </li>
         <li>
-          <RouterLink
+          <router-link
             to="/"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><BookText class="w-6 h-6" />Manage Menu</RouterLink
+          >
+            <ShoppingCart class="w-6 h-6" />Food Order</router-link
           >
         </li>
         <li>
-          <RouterLink
+          <router-link
             to="/"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><MessageCircleMore class="w-6 h-6" />Customer Review</RouterLink
+            ><BookText class="w-6 h-6" />Manage Menu</router-link
+          >
+        </li>
+        <li>
+          <router-link
+            to="/"
+            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
+            ><MessageCircleMore class="w-6 h-6" />Customer Review</router-link
           >
         </li>
       </ul>
@@ -53,32 +53,34 @@
         <span></span>
         OTHERS
         <li class="mt-4">
-          <RouterLink
-            to="/"
+          <router-link
+            to="/setting"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><Settings class="w-6 h-6" /> Settings</RouterLink
+            ><Settings class="w-6 h-6" /> Settings</router-link
           >
         </li>
         <li>
-          <RouterLink
+          <router-link
             to="/"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><CreditCard class="w-6 h-6" />Payment</RouterLink
+            ><CreditCard class="w-6 h-6" />Payment</router-link
           >
         </li>
         <li>
-          <RouterLink
+          <router-link
             to="/"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><User class="w-6 h-6" /> Accounts</RouterLink
+            ><User class="w-6 h-6" /> Accounts</router-link
           >
         </li>
         <li>
-          <RouterLink
+          <button
             to="/"
-            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><Info class="w-6 h-6" />Help</RouterLink
+            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2 cursor-pointer w-full"
+            @click="handleLogout"
           >
+            <LogOut class="w-6 h-6" />LogOut
+          </button>
         </li>
       </ul>
     </nav>
@@ -87,22 +89,30 @@
 
 <script setup lang="ts">
 import { useUIStore } from "@/stores/ui";
+import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
 import {
   LayoutDashboard,
   ShoppingCart,
   BookText,
   MessageCircleMore,
-  Info,
   User,
   CreditCard,
   Settings,
+  LogOut,
 } from "lucide-vue-next";
 
 const uiStore = useUIStore();
+const authStore = useAuthStore();
+const router = useRouter();
 
 const closeSidebar = () => {
   if (window.innerWidth < 768) {
     uiStore.isSidebarOpen = false;
   }
+};
+const handleLogout = () => {
+  authStore.logout();
+  router.push("/");
 };
 </script>

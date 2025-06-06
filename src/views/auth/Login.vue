@@ -28,7 +28,10 @@
         </div>
         <h1 class="text-3xl mt-8">Login to your account</h1>
         <p class="text-xs text-[#273240] mt-4">Enter your details to login.</p>
-        <form class="flex flex-col items-center w-1/2 max-sm:w-full">
+        <form
+          class="flex flex-col items-center w-1/2 max-sm:w-full"
+          @submit.prevent="handleLogin"
+        >
           <div class="w-full mt-8">
             <label
               for="input-group-1"
@@ -43,11 +46,15 @@
               </div>
               <input
                 type="text"
-                id="input-group-1"
+                id="email"
+                v-model="form.email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="arollefona11@gmail.com"
               />
             </div>
+            <p v-if="errors.email" class="text-xs text-red-500 mt-1">
+              {{ errors.email }}
+            </p>
           </div>
           <div class="w-full">
             <label
@@ -60,7 +67,9 @@
                 <LockKeyhole class="text-gray-900 w-4 h-4" />
               </div>
               <input
+                id="password"
                 :type="showPassword ? 'text' : 'password'"
+                v-model="form.password"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="........"
               />
@@ -72,13 +81,16 @@
                 <Eye v-else class="text-gray-900 w-4 h-4" />
               </div>
             </div>
+            <p v-if="errors.password" class="text-xs text-red-500 mt-1">
+              {{ errors.password }}
+            </p>
           </div>
           <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-2">
               <input
-                id="default-checkbox"
+                id="remember"
                 type="checkbox"
-                value=""
+                v-model="form.remember"
                 class="w-4 h-4 text-[#5A67BA] bg-gray-100 border-gray-300 rounded-sm outline-none"
               />
               <label for="default-checkbox" class="text-xs text-[#273240]"
@@ -92,9 +104,14 @@
           <button
             type="submit"
             class="bg-[#5A67BA] w-full px-4 py-2 rounded text-white mt-8"
+            :disabled="isSubmitting"
           >
-            Login
+            <span v-if="isSubmitting">Logging in...</span>
+            <span v-else>Login</span>
           </button>
+          <p v-if="loginError" class="text-xs text-red-500 mt-2">
+            {{ loginError }}
+          </p>
         </form>
       </div>
       <div
@@ -106,10 +123,17 @@
         <p class="flex gap-2 items-center">
           <Globe class="text-[#273240]" />
           <select
+            v-model="currentLocale"
+            @change="changeLanguage"
             class="text-[#273240] text-sm block w-full p-2.5 outline-none"
           >
-            <option selected>ENG</option>
-            <option value="FR">FR</option>
+            <option
+              v-for="locale in supportedLocales"
+              :key="locale"
+              :value="locale"
+            >
+              {{ locale.toUpperCase() }}
+            </option>
           </select>
         </p>
       </div>
@@ -135,10 +159,83 @@ import {
   Eye,
   EyeOff,
 } from "lucide-vue-next";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
+import { useAppStore } from "@/stores/app";
+import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
+
+const { t, locale } = useI18n();
+const appStore = useAppStore();
+
+const authStore = useAuthStore();
+const router = useRouter();
+
 const showPassword = ref(false);
+const isSubmitting = ref(false);
+const loginError = ref("");
+
+const currentLocale = ref(appStore.currentLocale);
+const supportedLocales = computed(() => appStore.supportedLocales);
+
+const changeLanguage = () => {
+  locale.value = currentLocale.value;
+  appStore.setLocale(currentLocale.value);
+};
+
+const form = ref({
+  email: "",
+  password: "",
+  remember: false,
+});
+
+const errors = ref({
+  email: "",
+  password: "",
+});
 
 const togglePassword = () => {
   showPassword.value = !showPassword.value;
+};
+
+const validateForm = () => {
+  let isValid = true;
+  errors.value = { email: "", password: "" };
+
+  if (!form.value.email) {
+    errors.value.email = "Email is required";
+    isValid = false;
+  } else if (!/^\S+@\S+\.\S+$/.test(form.value.email)) {
+    errors.value.email = "Please enter a valid email";
+    isValid = false;
+  }
+
+  if (!form.value.password) {
+    errors.value.password = "Password is required";
+    isValid = false;
+  } else if (form.value.password.length < 6) {
+    errors.value.password = "Password must be at least 6 characters";
+    isValid = false;
+  }
+
+  return isValid;
+};
+
+const handleLogin = async () => {
+  if (!validateForm()) return;
+
+  isSubmitting.value = true;
+  loginError.value = "";
+
+  try {
+    const user = authStore.login(form.value.email, form.value.password);
+    if (user) {
+      router.push("/home");
+    } else {
+      loginError.value = "Invalid email or password";
+    }
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>

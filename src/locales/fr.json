@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "Mon Template Vue",
+    "description": "Template Vue 3 avec Vite, Tailwind CSS, Pinia et TypeScript"
+  },
+  "auth": {
+    "login": {
+      "title": "Connectez-vous à votre compte"
+    },
+    "register": {
+      "title": "Créer un nouveau compte"
+    },
+    "home": {
+      "title": "Home"
+    },
+    "settings": {
+      "title": "Paramètres"
+    }
+  }
+}
