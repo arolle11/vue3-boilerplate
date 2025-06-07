@@ -75,7 +75,6 @@
         </li>
         <li>
           <button
-            to="/"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2 cursor-pointer w-full"
             @click="handleLogout"
           >

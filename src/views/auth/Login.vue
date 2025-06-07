@@ -11,12 +11,14 @@
           <h1 class="text-xs font-bold text-[#5A67BA]">GOODFOOD</h1>
         </div>
         <div class="flex items-center gap-4">
-          <p class="text-[#273240] text-xs max-sm:hidden">New to Good Food?</p>
+          <p class="text-[#273240] text-xs max-sm:hidden">
+            {{ t("login.new_to_good_food") }}
+          </p>
           <button
             type="button"
             class="py-2.5 px-5 text-xs text-[#273240] outline-none rounded-lg border border-[#273240] cursor-pointer"
           >
-            <router-link to="/register">Register</router-link>
+            <router-link to="/register">{{ t("login.register") }}</router-link>
           </button>
         </div>
       </div>
@@ -26,8 +28,8 @@
         >
           <CircleUserRound class="text-[#273240] w-12 h-12" />
         </div>
-        <h1 class="text-3xl mt-8">Login to your account</h1>
-        <p class="text-xs text-[#273240] mt-4">Enter your details to login.</p>
+        <h1 class="text-3xl mt-8">{{ t("login.title") }}</h1>
+        <p class="text-xs text-[#273240] mt-4">{{ t("login.subtitle") }}</p>
         <form
           class="flex flex-col items-center w-1/2 max-sm:w-full"
           @submit.prevent="handleLogin"
@@ -48,6 +50,9 @@
                 type="text"
                 id="email"
                 v-model="form.email"
+                @input="clearEmailError"
+                @focus="clearEmailError"
+                autocomplete="email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="arollefona11@gmail.com"
               />
@@ -60,7 +65,7 @@
             <label
               for="input-group-1"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Password</label
+              >{{ t("login.password") }}</label
             >
             <div class="relative mb-6">
               <div class="absolute inset-y-0 start-0 flex items-center ps-3.5">
@@ -70,6 +75,9 @@
                 id="password"
                 :type="showPassword ? 'text' : 'password'"
                 v-model="form.password"
+                @input="clearPasswordError"
+                @focus="clearPasswordError"
+                autocomplete="current-password"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="........"
               />
@@ -93,12 +101,12 @@
                 v-model="form.remember"
                 class="w-4 h-4 text-[#5A67BA] bg-gray-100 border-gray-300 rounded-sm outline-none"
               />
-              <label for="default-checkbox" class="text-xs text-[#273240]"
-                >Remember Me</label
-              >
+              <label for="default-checkbox" class="text-xs text-[#273240]">{{
+                t("login.remember_me")
+              }}</label>
             </div>
             <p class="text-xs text-[#273240] cursor-pointer">
-              Forgot Password ?
+              {{ t("login.forgot_password") }}
             </p>
           </div>
           <button
@@ -106,8 +114,8 @@
             class="bg-[#5A67BA] w-full px-4 py-2 rounded text-white mt-8"
             :disabled="isSubmitting"
           >
-            <span v-if="isSubmitting">Logging in...</span>
-            <span v-else>Login</span>
+            <span v-if="isSubmitting">{{ t("login.loader") }}</span>
+            <span v-else>{{ t("login.login_button") }}</span>
           </button>
           <p v-if="loginError" class="text-xs text-red-500 mt-2">
             {{ loginError }}
@@ -118,7 +126,7 @@
         class="flex max-sm:flex-col max-sm:gap-2 items-center justify-between"
       >
         <p class="text-sm text-[#273240]">
-          ©2025 MonEntreprise. Tous droits réservés.
+          ©2025 {{ t("login.all_rights_reserved") }}
         </p>
         <p class="flex gap-2 items-center">
           <Globe class="text-[#273240]" />
@@ -196,6 +204,16 @@ const errors = ref({
 
 const togglePassword = () => {
   showPassword.value = !showPassword.value;
+};
+
+const clearEmailError = () => {
+  errors.value.email = "";
+  loginError.value = "";
+};
+
+const clearPasswordError = () => {
+  errors.value.password = "";
+  loginError.value = "";
 };
 
 const validateForm = () => {

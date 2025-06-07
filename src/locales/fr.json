@@ -1,20 +1,53 @@
 {
-  "app": {
-    "name": "Mon Template Vue",
-    "description": "Template Vue 3 avec Vite, Tailwind CSS, Pinia et TypeScript"
+  "login": {
+    "new_to_good_food": "Nouveau à Good Food?",
+    "register": "S'inscrire",
+    "title": "Connexion à votre compte",
+    "subtitle": "Entrez vos informations pour vous connecter.",
+    "password": "Mot de passe",
+    "remember_me": "Se souvenir de moi",
+    "forgot_password": "Mot de passe oublié ?",
+    "loader": " Connexion...",
+    "login_button": "Connexion",
+    "all_rights_reserved": "MonEntreprise. Tous droits réservés."
   },
-  "auth": {
-    "login": {
-      "title": "Connectez-vous à votre compte"
-    },
-    "register": {
-      "title": "Créer un nouveau compte"
-    },
-    "home": {
-      "title": "Home"
-    },
-    "settings": {
-      "title": "Paramètres"
-    }
+  "register": {
+    "title": "Créer un nouveau compte",
+    "subtitle": "Entrez vos informations pour vous inscrire.",
+    "name": "Nom complet",
+    "register_button": "Créer un compte",
+    "creating_account": "Création du compte...",
+    "conditions": "J'accepte les Termes et Conditions",
+    "already_have_account": "Vous avez déjà un compte ?",
+    "login": "Connexion"
+  },
+  "table": {
+    "search": "Rechercher...",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "showing": "Affichage",
+    "to": "à",
+    "of": "sur",
+    "results": "résultats"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "sales_chart": "Vue d'ensemble des ventes",
+    "users_chart": "Croissance des utilisateurs",
+    "sales": "Ventes",
+    "new_users": "Nouveaux utilisateurs",
+    "product": "Produit",
+    "customer": "Client",
+    "amount": "Montant",
+    "status": "Statut",
+    "actions": "actions"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "activity_chart": "Activité récente",
+    "activities": "Activités",
+    "action": "Action",
+    "user": "Utilisateur",
+    "date": "Date"
   }
 }

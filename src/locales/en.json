@@ -1,20 +1,53 @@
 {
-  "app": {
-    "name": "My Vue Boilerplate",
-    "description": "Vue 3 Boilerplate with Vite, Tailwind CSS, Pinia and TypeScript"
+  "login": {
+    "new_to_good_food": "New to Good Food?",
+    "register": "Register",
+    "title": "Login to your account",
+    "subtitle": "Enter your details to login.",
+    "password": "Password",
+    "remember_me": "Remember me",
+    "forgot_password": "Forgot Password?",
+    "loader": "Logging in...",
+    "login_button": "Login",
+    "all_rights_reserved": "MyEntreprise. All rights reserved."
   },
-  "auth": {
-    "login": {
-      "title": "Login to your account"
-    },
-    "register": {
-      "title": "Create a new account"
-    },
-    "home": {
-      "title": "Home"
-    },
-    "settings": {
-      "title": "Settings"
-    }
+  "register": {
+    "title": "Create a new account",
+    "subtitle": "Enter your details to register.",
+    "name": "Full Name",
+    "register_button": "Create an account",
+    "creating_account": "Creating account...",
+    "conditions": "I agree to the Terms and Conditions",
+    "already_have_account": "Already have an account?",
+    "login": "Login"
+  },
+  "table": {
+    "search": "Search...",
+    "previous": "Previous",
+    "next": "Next",
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "results": "results"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "sales_chart": "Sales Overview",
+    "users_chart": "User Growth",
+    "sales": "Sales",
+    "new_users": "New Users",
+    "product": "Product",
+    "customer": "Customer",
+    "amount": "Amount",
+    "status": "Status",
+    "actions": "actions"
+  },
+  "settings": {
+    "title": "Settings",
+    "activity_chart": "Recent Activity",
+    "activities": "Activities",
+    "action": "Action",
+    "user": "User",
+    "date": "Date"
   }
 }

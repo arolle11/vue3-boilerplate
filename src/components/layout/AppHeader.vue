@@ -1,5 +1,5 @@
 <template>
-  <header class="md:border-b md:border-[#C8CBD9] shadow p-6">
+  <header class="md:border-b md:border-[#C8CBD9] shadow py-6 px-12">
     <div class="container flex justify-between items-center">
       <button
         @click="uiStore.toggleSidebar"

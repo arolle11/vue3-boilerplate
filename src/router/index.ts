@@ -13,7 +13,8 @@ const routes = [
     component: Login,
     meta: {
       layout: "blank",
-      title: "auth.login.title",
+      // title: "auth.login.title",
+      // title: "login",
       requiresGuest: true,
     },
   },
@@ -23,7 +24,7 @@ const routes = [
     component: Register,
     meta: {
       layout: "blank",
-      title: "auth.register.title",
+      // title: "register",
       requiresGuest: true,
     },
   },
@@ -33,7 +34,7 @@ const routes = [
     component: Home,
     meta: {
       layout: "default",
-      title: "home.title",
+      // title: "home",
       requiresAuth: true,
     },
   },
@@ -43,7 +44,7 @@ const routes = [
     component: Setting,
     meta: {
       layout: "default",
-      title: "settings.title",
+      // title: "settings",
       requiresAuth: true,
     },
   },

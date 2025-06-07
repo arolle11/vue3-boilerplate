@@ -12,13 +12,13 @@
         </div>
         <div class="flex items-center gap-4">
           <p class="text-[#273240] text-xs max-sm:hidden">
-            Already have an account?
+            {{ t("register.already_have_account") }}
           </p>
           <button
             type="button"
             class="py-2.5 px-5 text-xs text-[#273240] outline-none rounded-lg border border-[#273240]"
           >
-            <router-link to="/">Login</router-link>
+            <router-link to="/">{{ t("register.login") }}</router-link>
           </button>
         </div>
       </div>
@@ -28,9 +28,9 @@
         >
           <CircleUserRound class="text-[#273240] w-12 h-12" />
         </div>
-        <h1 class="text-3xl mt-8">Create a new account</h1>
+        <h1 class="text-3xl mt-8">{{ t("register.title") }}</h1>
         <p class="text-xs text-[#273240] mt-4">
-          Enter your details to register.
+          {{ t("register.subtitle") }}
         </p>
         <form
           class="flex flex-col items-center w-1/2 max-sm:w-full"
@@ -40,7 +40,7 @@
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Full Name*</label
+              >{{ t("register.name") }}*</label
             >
             <div class="relative mb-6">
               <div
@@ -52,6 +52,9 @@
                 type="text"
                 id="name"
                 v-model="form.name"
+                @input="clearFirstnameError"
+                @focus="clearFirstnameError"
+                autocomplete="name"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="arolle fona"
               />
@@ -76,6 +79,9 @@
                 type="text"
                 id="email"
                 v-model="form.email"
+                @input="clearEmailError"
+                @focus="clearEmailError"
+                autocomplete="email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="arollefona11@gmail.com"
               />
@@ -88,7 +94,7 @@
             <label
               for="password"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Password*</label
+              >{{ t("login.password") }}*</label
             >
             <div class="relative mb-6">
               <div class="absolute inset-y-0 start-0 flex items-center ps-3.5">
@@ -98,6 +104,9 @@
                 id="password"
                 :type="showPassword ? 'text' : 'password'"
                 v-model="form.password"
+                @input="clearPasswordError"
+                @focus="clearPasswordError"
+                autocomplete="new-password"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="........"
               />
@@ -118,11 +127,13 @@
               id="terms"
               type="checkbox"
               v-model="form.terms"
+              @input="clearcheckboxError"
+              @focus="clearcheckboxError"
               class="w-4 h-4 text-[#5A67BA] bg-gray-100 border-gray-300 rounded-sm outline-none"
             />
-            <label for="terms" class="text-xs text-[#273240]"
-              >I agree to the Terms and Conditions</label
-            >
+            <label for="terms" class="text-xs text-[#273240]">{{
+              t("register.conditions")
+            }}</label>
           </div>
           <p v-if="errors.terms" class="text-xs text-red-500 w-full mt-1">
             {{ errors.terms }}
@@ -132,8 +143,10 @@
             class="bg-[#5A67BA] w-full px-4 py-2 rounded text-white mt-8"
             :disabled="isSubmitting"
           >
-            <span v-if="isSubmitting">Creating account...</span>
-            <span v-else>Create an account</span>
+            <span v-if="isSubmitting">{{
+              t("register.creating_account")
+            }}</span>
+            <span v-else>{{ t("register.register_button") }}</span>
           </button>
           <p v-if="registerError" class="text-xs text-red-500 mt-2">
             {{ registerError }}
@@ -144,15 +157,22 @@
         class="flex max-sm:flex-col max-sm:gap-2 items-center justify-between"
       >
         <p class="text-sm text-[#273240]">
-          ©2025 MonEntreprise. Tous droits réservés.
+          ©2025 {{ t("login.all_rights_reserved") }}
         </p>
         <p class="flex gap-2 items-center">
           <Globe class="text-[#273240]" />
           <select
+            v-model="currentLocale"
+            @change="changeLanguage"
             class="text-[#273240] text-sm block w-full p-2.5 outline-none"
           >
-            <option selected>ENG</option>
-            <option value="FR">FR</option>
+            <option
+              v-for="locale in supportedLocales"
+              :key="locale"
+              :value="locale"
+            >
+              {{ locale.toUpperCase() }}
+            </option>
           </select>
         </p>
       </div>
@@ -179,9 +199,14 @@ import {
   Eye,
   EyeOff,
 } from "lucide-vue-next";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
+import { useAppStore } from "@/stores/app";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
+
+const { t, locale } = useI18n();
+const appStore = useAppStore();
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -189,6 +214,14 @@ const router = useRouter();
 const showPassword = ref(false);
 const isSubmitting = ref(false);
 const registerError = ref("");
+
+const currentLocale = ref(appStore.currentLocale);
+const supportedLocales = computed(() => appStore.supportedLocales);
+
+const changeLanguage = () => {
+  locale.value = currentLocale.value;
+  appStore.setLocale(currentLocale.value);
+};
 
 const form = ref({
   name: "",
@@ -206,6 +239,26 @@ const errors = ref({
 
 const togglePassword = () => {
   showPassword.value = !showPassword.value;
+};
+
+const clearEmailError = () => {
+  errors.value.email = "";
+  registerError.value = "";
+};
+
+const clearPasswordError = () => {
+  errors.value.password = "";
+  registerError.value = "";
+};
+
+const clearFirstnameError = () => {
+  errors.value.name = "";
+  registerError.value = "";
+};
+
+const clearcheckboxError = () => {
+  errors.value.terms = "";
+  registerError.value = "";
 };
 
 const validateForm = () => {
@@ -228,9 +281,27 @@ const validateForm = () => {
   if (!form.value.password) {
     errors.value.password = "Password is required";
     isValid = false;
-  } else if (form.value.password.length < 6) {
-    errors.value.password = "Password must be at least 6 characters";
-    isValid = false;
+  } else {
+    const password = form.value.password;
+    let errorMessages = [];
+
+    if (password.length < 8) {
+      errorMessages.push("at least 8 characters");
+    }
+    if (!/[A-Z]/.test(password)) {
+      errorMessages.push("at least 1 uppercase letter");
+    }
+    if (!/[0-9]/.test(password)) {
+      errorMessages.push("at least 1 number");
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errorMessages.push("at least 1 special character");
+    }
+
+    if (errorMessages.length > 0) {
+      errors.value.password = `Password must contain: ${errorMessages.join(", ")}`;
+      isValid = false;
+    }
   }
 
   if (!form.value.terms) {
@@ -248,16 +319,23 @@ const handleRegister = async () => {
   registerError.value = "";
 
   try {
-    const emailExists = authStore.demoUsers.some(
-      (user) => user.email === form.value.email
+    // Appel direct à register() qui gère maintenant la vérification d'email
+    const user = authStore.register(
+      form.value.name,
+      form.value.email,
+      form.value.password
     );
-    if (emailExists) {
-      registerError.value = "Email already registered";
-      return;
-    }
 
-    authStore.register(form.value.name, form.value.email, form.value.password);
+    // Si on arrive ici, l'inscription a réussi
     router.push("/");
+  } catch (error) {
+    // Gestion des erreurs spécifiques
+    if (error.message === "Email already exists") {
+      registerError.value = "Email already registered";
+    } else {
+      registerError.value = "An error occurred during registration";
+      console.error(error);
+    }
   } finally {
     isSubmitting.value = false;
   }
