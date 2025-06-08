@@ -231,7 +231,6 @@ const recentOrders = [
     amount: 89,
     status: "Pending",
   },
-  // ... autres données
 ];
 
 const orderColumns = [

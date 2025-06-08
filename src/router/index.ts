@@ -13,8 +13,6 @@ const routes = [
     component: Login,
     meta: {
       layout: "blank",
-      // title: "auth.login.title",
-      // title: "login",
       requiresGuest: true,
     },
   },
@@ -24,7 +22,6 @@ const routes = [
     component: Register,
     meta: {
       layout: "blank",
-      // title: "register",
       requiresGuest: true,
     },
   },
@@ -34,7 +31,6 @@ const routes = [
     component: Home,
     meta: {
       layout: "default",
-      // title: "home",
       requiresAuth: true,
     },
   },
@@ -44,14 +40,13 @@ const routes = [
     component: Setting,
     meta: {
       layout: "default",
-      // title: "settings",
       requiresAuth: true,
     },
   },
-  {
-    path: "/:pathMatch(.*)*",
-    redirect: "/home",
-  },
+  // {
+  //   path: "/:pathMatch(.*)*",
+  //   redirect: "/home",
+  // },
 ];
 
 const router = createRouter({
@@ -75,20 +70,40 @@ router.afterEach((to) => {
 });
 
 // Garde de navigation
-router.beforeEach((to, from, next) => {
+// router.beforeEach((to, from, next) => {
+//   const authStore = useAuthStore();
+
+//   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+//     next({ name: "Login", query: { redirect: to.fullPath } });
+//     return;
+//   }
+
+//   if (to.meta.requiresGuest && authStore.isAuthenticated) {
+//     next({ name: "Home" });
+//     return;
+//   }
+
+//   next();
+// });
+
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
 
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next({ name: "Login", query: { redirect: to.fullPath } });
-    return;
+  // Vérifier l'authentification uniquement si nécessaire
+  if (to.meta.requiresAuth) {
+    if (authStore.isAuthenticated) {
+      next();
+    } else {
+      next({
+        name: "Login",
+        query: { redirect: to.fullPath }, // Conserve l'URL demandée
+      });
+    }
+  } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
+    next({ name: "Home" }); // Redirige si déjà connecté
+  } else {
+    next(); // Autorise l'accès
   }
-
-  if (to.meta.requiresGuest && authStore.isAuthenticated) {
-    next({ name: "Home" });
-    return;
-  }
-
-  next();
 });
 
 export default router;

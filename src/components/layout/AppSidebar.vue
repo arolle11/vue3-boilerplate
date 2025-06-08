@@ -31,46 +31,57 @@
             to="/"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
           >
-            <ShoppingCart class="w-6 h-6" />Food Order</router-link
+            <ShoppingCart class="w-6 h-6" />{{
+              t("sidebar.food_order")
+            }}</router-link
           >
         </li>
         <li>
           <router-link
             to="/"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><BookText class="w-6 h-6" />Manage Menu</router-link
+            ><BookText class="w-6 h-6" />{{
+              t("sidebar.manage_menu")
+            }}</router-link
           >
         </li>
         <li>
           <router-link
             to="/"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><MessageCircleMore class="w-6 h-6" />Customer Review</router-link
+            ><MessageCircleMore class="w-6 h-6" />{{
+              t("sidebar.customer_review")
+            }}</router-link
           >
         </li>
       </ul>
       <ul class="space-y-4 text-[#273240]">
         <span></span>
-        OTHERS
+        {{
+          t("sidebar.others")
+        }}
         <li class="mt-4">
           <router-link
             to="/setting"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><Settings class="w-6 h-6" /> Settings</router-link
+            ><Settings class="w-6 h-6" />
+            {{ t("sidebar.settings") }}</router-link
           >
         </li>
         <li>
           <router-link
             to="/"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><CreditCard class="w-6 h-6" />Payment</router-link
+            ><CreditCard class="w-6 h-6" />{{
+              t("sidebar.payment")
+            }}</router-link
           >
         </li>
         <li>
           <router-link
             to="/"
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><User class="w-6 h-6" /> Accounts</router-link
+            ><User class="w-6 h-6" /> {{ t("sidebar.accounts") }}</router-link
           >
         </li>
         <li>
@@ -78,7 +89,7 @@
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2 cursor-pointer w-full"
             @click="handleLogout"
           >
-            <LogOut class="w-6 h-6" />LogOut
+            <LogOut class="w-6 h-6" />{{ t("sidebar.logout") }}
           </button>
         </li>
       </ul>
@@ -87,6 +98,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { useUIStore } from "@/stores/ui";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
@@ -101,6 +113,7 @@ import {
   LogOut,
 } from "lucide-vue-next";
 
+const { t, locale } = useI18n();
 const uiStore = useUIStore();
 const authStore = useAuthStore();
 const router = useRouter();

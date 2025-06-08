@@ -42,12 +42,14 @@
     "status": "Statut",
     "actions": "actions"
   },
-  "settings": {
-    "title": "Paramètres",
-    "activity_chart": "Activité récente",
-    "activities": "Activités",
-    "action": "Action",
-    "user": "Utilisateur",
-    "date": "Date"
+  "sidebar": {
+    "food_order": "Commandes",
+    "manage_menu": "Menu de gestion",
+    "customer_review": "Avis des clients",
+    "others": "AUTRES",
+    "settings": "Paramètres",
+    "payment": "Paiement",
+    "accounts": "Comptes",
+    "logout": "Déconnexion"
   }
 }

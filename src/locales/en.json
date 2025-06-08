@@ -42,12 +42,14 @@
     "status": "Status",
     "actions": "actions"
   },
-  "settings": {
-    "title": "Settings",
-    "activity_chart": "Recent Activity",
-    "activities": "Activities",
-    "action": "Action",
-    "user": "User",
-    "date": "Date"
+  "sidebar": {
+    "food_order": "Food Order",
+    "manage_menu": "Manage Menu",
+    "customer_review": "Customer Review",
+    "others": "OTHERS",
+    "settings": "Settings",
+    "payment": "Payment",
+    "accounts": "Accounts",
+    "logout": "LogOut"
   }
 }
