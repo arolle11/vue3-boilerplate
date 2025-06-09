@@ -239,35 +239,18 @@ const validateForm = () => {
   return isValid;
 };
 
-// const handleLogin = async () => {
-//   if (!validateForm()) return;
-
-//   isSubmitting.value = true;
-//   loginError.value = "";
-
-//   try {
-//     const user = authStore.login(form.value.email, form.value.password);
-//     if (user) {
-//       router.push("/home");
-//     } else {
-//       loginError.value = "Invalid email or password";
-//     }
-//   } finally {
-//     isSubmitting.value = false;
-//   }
-// };
 const handleLogin = async () => {
   if (!validateForm()) return;
 
   isSubmitting.value = true;
+  loginError.value = "";
+
   try {
-    if (await authStore.login(form.value.email, form.value.password)) {
-      // Récupère la redirection depuis l'URL ou utilise '/home' par défaut
-      const redirectPath =
-        router.currentRoute.value.query.redirect?.toString() || "/home";
-      router.push(redirectPath);
+    const user = authStore.login(form.value.email, form.value.password);
+    if (user) {
+      router.push("/home");
     } else {
-      loginError.value = "Identifiants incorrects";
+      loginError.value = "Invalid email or password";
     }
   } finally {
     isSubmitting.value = false;

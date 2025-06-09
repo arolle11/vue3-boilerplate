@@ -43,10 +43,10 @@ const routes = [
       requiresAuth: true,
     },
   },
-  // {
-  //   path: "/:pathMatch(.*)*",
-  //   redirect: "/home",
-  // },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/home",
+  },
 ];
 
 const router = createRouter({
@@ -70,40 +70,20 @@ router.afterEach((to) => {
 });
 
 // Garde de navigation
-// router.beforeEach((to, from, next) => {
-//   const authStore = useAuthStore();
-
-//   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-//     next({ name: "Login", query: { redirect: to.fullPath } });
-//     return;
-//   }
-
-//   if (to.meta.requiresGuest && authStore.isAuthenticated) {
-//     next({ name: "Home" });
-//     return;
-//   }
-
-//   next();
-// });
-
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
 
-  // Vérifier l'authentification uniquement si nécessaire
-  if (to.meta.requiresAuth) {
-    if (authStore.isAuthenticated) {
-      next();
-    } else {
-      next({
-        name: "Login",
-        query: { redirect: to.fullPath }, // Conserve l'URL demandée
-      });
-    }
-  } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
-    next({ name: "Home" }); // Redirige si déjà connecté
-  } else {
-    next(); // Autorise l'accès
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    next({ name: "Login", query: { redirect: to.fullPath } });
+    return;
   }
+
+  if (to.meta.requiresGuest && authStore.isAuthenticated) {
+    next({ name: "Home" });
+    return;
+  }
+
+  next();
 });
 
 export default router;
