@@ -15,7 +15,7 @@
       <h1 class="text-xs font-bold text-[#5A67BA]">GOODFOOD</h1>
     </div>
 
-    <nav @click="closeSidebar" class="space-y-6">
+    <nav class="space-y-6" @click="closeSidebar">
       <ul class="space-y-4 mt-12 text-[#273240]">
         <span class="">MENU</span>
         <li class="mt-4">
@@ -27,61 +27,39 @@
           >
         </li>
         <li>
-          <router-link
-            to="/"
-            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-          >
-            <ShoppingCart class="w-6 h-6" />{{
-              t("sidebar.food_order")
-            }}</router-link
+          <router-link to="/" class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2">
+            <ShoppingCart class="w-6 h-6" />{{ t('sidebar.food_order') }}</router-link
           >
         </li>
         <li>
-          <router-link
-            to="/"
-            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><BookText class="w-6 h-6" />{{
-              t("sidebar.manage_menu")
-            }}</router-link
+          <router-link to="/" class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
+            ><BookText class="w-6 h-6" />{{ t('sidebar.manage_menu') }}</router-link
           >
         </li>
         <li>
-          <router-link
-            to="/"
-            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><MessageCircleMore class="w-6 h-6" />{{
-              t("sidebar.customer_review")
-            }}</router-link
+          <router-link to="/" class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
+            ><MessageCircleMore class="w-6 h-6" />{{ t('sidebar.customer_review') }}</router-link
           >
         </li>
       </ul>
       <ul class="space-y-4 text-[#273240]">
         <span></span>
         {{
-          t("sidebar.others")
+          t('sidebar.others')
         }}
         <li class="mt-4">
-          <router-link
-            to="/setting"
-            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><Settings class="w-6 h-6" />
-            {{ t("sidebar.settings") }}</router-link
+          <router-link to="/setting" class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
+            ><Settings class="w-6 h-6" /> {{ t('sidebar.settings') }}</router-link
           >
         </li>
         <li>
-          <router-link
-            to="/"
-            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><CreditCard class="w-6 h-6" />{{
-              t("sidebar.payment")
-            }}</router-link
+          <router-link to="/" class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
+            ><CreditCard class="w-6 h-6" />{{ t('sidebar.payment') }}</router-link
           >
         </li>
         <li>
-          <router-link
-            to="/"
-            class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
-            ><User class="w-6 h-6" /> {{ t("sidebar.accounts") }}</router-link
+          <router-link to="/" class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2"
+            ><User class="w-6 h-6" /> {{ t('sidebar.accounts') }}</router-link
           >
         </li>
         <li>
@@ -89,7 +67,7 @@
             class="flex gap-2 hover:bg-[#e3e7f4] hover:text-[#707FDD] p-2 cursor-pointer w-full"
             @click="handleLogout"
           >
-            <LogOut class="w-6 h-6" />{{ t("sidebar.logout") }}
+            <LogOut class="w-6 h-6" />{{ t('sidebar.logout') }}
           </button>
         </li>
       </ul>
@@ -98,33 +76,33 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { useUIStore } from "@/stores/ui";
-import { useAuthStore } from "@/stores/auth";
-import { useRouter } from "vue-router";
-import {
-  LayoutDashboard,
-  ShoppingCart,
-  BookText,
-  MessageCircleMore,
-  User,
-  CreditCard,
-  Settings,
-  LogOut,
-} from "lucide-vue-next";
+  import { useI18n } from 'vue-i18n';
+  import { useUIStore } from '@/stores/ui';
+  import { useAuthStore } from '@/stores/auth';
+  import { useRouter } from 'vue-router';
+  import {
+    LayoutDashboard,
+    ShoppingCart,
+    BookText,
+    MessageCircleMore,
+    User,
+    CreditCard,
+    Settings,
+    LogOut,
+  } from 'lucide-vue-next';
 
-const { t, locale } = useI18n();
-const uiStore = useUIStore();
-const authStore = useAuthStore();
-const router = useRouter();
+  const { t } = useI18n();
+  const uiStore = useUIStore();
+  const authStore = useAuthStore();
+  const router = useRouter();
 
-const closeSidebar = () => {
-  if (window.innerWidth < 768) {
-    uiStore.isSidebarOpen = false;
-  }
-};
-const handleLogout = () => {
-  authStore.logout();
-  router.push("/");
-};
+  const closeSidebar = () => {
+    if (window.innerWidth < 768) {
+      uiStore.isSidebarOpen = false;
+    }
+  };
+  const handleLogout = () => {
+    authStore.logout();
+    router.push('/');
+  };
 </script>
