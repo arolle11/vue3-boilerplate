@@ -50,7 +50,7 @@ npm run dev
 
 ```
 
-## 👩‍💻 Author
+## 👩🏽‍💻 Author
 
 Made with ❤️ by Arolle Fona  
 🔗 [arollefona.me](https://arollefona.me) | [LinkedIn](https://www.linkedin.com/in/arolle-fona-300705188)
