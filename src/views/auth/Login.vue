@@ -164,6 +164,7 @@
   const currentLocale = ref(appStore.currentLocale);
   const supportedLocales = computed(() => appStore.supportedLocales);
 
+  console.log('supportedLocales', supportedLocales);
   const changeLanguage = () => {
     locale.value = currentLocale.value;
     appStore.setLocale(currentLocale.value);

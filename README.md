@@ -22,16 +22,16 @@ A modern, ready-to-use Vue 3 boilerplate to kickstart your next project with ess
 
 ## ✨ Features
 
-- 🔐 Authentication system
-- 📊 Dashboard with data tables and charts
-- 📁 Mock JSON data for testing and demos
-- 🧩 Reusable table and chart components
-- 🌍 Multilingual support with Vue I18n
-- 🎨 Styled using Tailwind CSS
-- 🔄 State management with Pinia
-- 💡 Custom hooks for reusability
-- 🔌 Ready-to-use CRUD service
-- 🧼 Prettier config for clean, formatted code
+- Authentication system
+- Dashboard with data tables and charts
+- Mock JSON data for testing and demos
+- Reusable table and chart components
+- Multilingual support with Vue I18n
+- Styled using Tailwind CSS
+- State management with Pinia
+- Custom hooks for reusability
+- Ready-to-use CRUD service
+- Prettier config for clean, formatted code
 
 ---
 
