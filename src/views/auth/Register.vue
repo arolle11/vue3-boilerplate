@@ -35,7 +35,9 @@
           @submit.prevent="handleRegister"
         >
           <div class="w-full mt-8">
-            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            <label
+              for="username"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >{{ t('register.name') }}*</label
             >
             <div class="relative mb-6">
@@ -43,10 +45,10 @@
                 <User class="text-gray-900 w-4 h-4" />
               </div>
               <input
-                id="name"
-                v-model="form.name"
+                id="username"
+                v-model="form.username"
                 type="text"
-                autocomplete="name"
+                autocomplete="username"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
                 placeholder="arolle fona"
                 @input="clearFirstnameError"
@@ -194,14 +196,14 @@
   };
 
   const form = ref({
-    name: '',
+    username: '',
     email: '',
     password: '',
     terms: false,
   });
 
   const errors = ref({
-    name: '',
+    username: '',
     email: '',
     password: '',
     terms: '',
@@ -233,10 +235,10 @@
 
   const validateForm = () => {
     let isValid = true;
-    errors.value = { name: '', email: '', password: '', terms: '' };
+    errors.value = { username: '', email: '', password: '', terms: '' };
 
-    if (!form.value.name) {
-      errors.value.name = 'Full name is required';
+    if (!form.value.username) {
+      errors.value.username = 'Username is required';
       isValid = false;
     }
 
@@ -289,19 +291,10 @@
     registerError.value = '';
 
     try {
-      // Appel direct à register() qui gère maintenant la vérification d'email
-      authStore.register(form.value.name, form.value.email, form.value.password);
-
-      // Si on arrive ici, l'inscription a réussi
+      authStore.register(form.value);
       router.push('/');
-    } catch (error) {
-      // Gestion des erreurs spécifiques
-      if (error.message === 'Email already exists') {
-        registerError.value = 'Email already registered';
-      } else {
-        registerError.value = 'An error occurred during registration';
-        console.error(error);
-      }
+    } catch {
+      registerError.value = 'An error occurred during registration';
     } finally {
       isSubmitting.value = false;
     }

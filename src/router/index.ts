@@ -52,22 +52,22 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
-    } else {
-      return { top: 0 };
-    }
-  },
+  // scrollBehavior(to, from, savedPosition) {
+  //   if (savedPosition) {
+  //     return savedPosition;
+  //   } else {
+  //     return { top: 0 };
+  //   }
+  // },
 });
 
-router.afterEach((to) => {
-  const { t } = i18n.global;
+// router.afterEach((to) => {
+//   const { t } = i18n.global;
 
-  if (to.meta.title) {
-    document.title = `${t(to.meta.title as string)} | ${t('app.name')}`;
-  }
-});
+//   if (to.meta.title) {
+//     document.title = `${t(to.meta.title as string)} | ${t('app.name')}`;
+//   }
+// });
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();

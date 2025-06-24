@@ -31,32 +31,32 @@
         <form class="flex flex-col items-center w-1/2 max-sm:w-full" @submit.prevent="handleLogin">
           <div class="w-full mt-8">
             <label
-              for="input-group-1"
+              for="username"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Email</label
+              >Username</label
             >
             <div class="relative mb-6">
               <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                 <Mail class="text-gray-900 w-4 h-4" />
               </div>
               <input
-                id="email"
-                v-model="form.email"
+                id="username"
+                v-model="form.username"
                 type="text"
-                autocomplete="email"
+                autocomplete="username"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5"
-                placeholder="arollefona11@gmail.com"
-                @input="clearEmailError"
-                @focus="clearEmailError"
+                placeholder="arolle11"
+                @input="clearUsernameError"
+                @focus="clearUsernameError"
               />
             </div>
-            <p v-if="errors.email" class="text-xs text-red-500 mt-1">
-              {{ errors.email }}
+            <p v-if="errors.username" class="text-xs text-red-500 mt-1">
+              {{ errors.username }}
             </p>
           </div>
           <div class="w-full">
             <label
-              for="input-group-1"
+              for="password"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >{{ t('login.password') }}</label
             >
@@ -125,7 +125,7 @@
             @change="changeLanguage"
           >
             <option v-for="loc in supportedLocales" :key="loc" :value="loc">
-              {{ locale.toUpperCase() }}
+              {{ loc.toUpperCase() }}
             </option>
           </select>
         </p>
@@ -164,20 +164,19 @@
   const currentLocale = ref(appStore.currentLocale);
   const supportedLocales = computed(() => appStore.supportedLocales);
 
-  console.log('supportedLocales', supportedLocales);
   const changeLanguage = () => {
     locale.value = currentLocale.value;
     appStore.setLocale(currentLocale.value);
   };
 
   const form = ref({
-    email: '',
+    username: '',
     password: '',
     remember: false,
   });
 
   const errors = ref({
-    email: '',
+    username: '',
     password: '',
   });
 
@@ -185,8 +184,8 @@
     showPassword.value = !showPassword.value;
   };
 
-  const clearEmailError = () => {
-    errors.value.email = '';
+  const clearUsernameError = () => {
+    errors.value.username = '';
     loginError.value = '';
   };
 
@@ -197,15 +196,17 @@
 
   const validateForm = () => {
     let isValid = true;
-    errors.value = { email: '', password: '' };
+    errors.value = { username: '', password: '' };
 
-    if (!form.value.email) {
-      errors.value.email = 'Email is required';
-      isValid = false;
-    } else if (!/^\S+@\S+\.\S+$/.test(form.value.email)) {
-      errors.value.email = 'Please enter a valid email';
+    if (!form.value.username) {
+      errors.value.username = 'Username is required';
       isValid = false;
     }
+    // Uncomment the following lines if you want to validate the email format
+    //  else if (!/^\S+@\S+\.\S+$/.test(form.value.email)) {
+    //   errors.value.email = 'Please enter a valid email';
+    //   isValid = false;
+    // }
 
     if (!form.value.password) {
       errors.value.password = 'Password is required';
@@ -223,15 +224,14 @@
 
     isSubmitting.value = true;
     loginError.value = '';
-
     try {
-      const user = authStore.login(form.value.email, form.value.password);
-      if (user) {
-        const redirectPath = router.currentRoute.value.query.redirect;
-        router.push(redirectPath ? redirectPath.toString() : '/home');
-      } else {
-        loginError.value = 'Invalid email or password';
-      }
+      isSubmitting.value = true;
+      loginError.value = '';
+      await authStore.login(form.value);
+      console.log('Login successful');
+      //router.push('/home');
+    } catch {
+      loginError.value = 'Invalid username or password';
     } finally {
       isSubmitting.value = false;
     }

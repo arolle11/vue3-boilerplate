@@ -1,91 +1,97 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import axios from 'axios';
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
+import type { User } from '@/types/user';
+import router from '@/router';
+
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  error: string | null;
 }
 
-export const useAuthStore = defineStore('auth', () => {
-  const loadUsers = (): User[] => {
-    const storedUsers = localStorage.getItem('users');
-    return storedUsers
-      ? JSON.parse(storedUsers)
-      : [
+export const useAuthStore = defineStore('auth', {
+  state: (): AuthState => ({
+    user: null,
+    token: null,
+    error: null,
+  }),
+  getters: {
+    isAuthenticated: (state) => !!state.token,
+    currentUser: (state) => state.user,
+  },
+  actions: {
+    async login(credentials: { username: string; password: string }) {
+      this.error = null;
+      // const router = useRouter();
+      console.log('Login response:', credentials);
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/user/login`,
           {
-            id: 1,
-            name: 'John Doe',
-            email: 'john@example.com',
-            password: 'password123',
+            username: credentials.username,
+            password: credentials.password,
           },
           {
-            id: 2,
-            name: 'Jane Smith',
-            email: 'jane@example.com',
-            password: 'password456',
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
+
+        this.token = response.data.token;
+        this.user = response.data;
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data));
+        router.push({ path: '/home' });
+      } catch (error) {
+        console.error('Login error:', error);
+        if (axios.isAxiosError(error)) {
+          this.error = error.response?.data?.message || 'Login failed';
+        } else {
+          this.error = 'An unexpected error occurred';
+        }
+      }
+    },
+
+    async register(userData: { username: string; password: string; email: string }) {
+      this.error = null;
+
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/users/add`,
+          {
+            username: userData.username,
+            password: userData.password,
+            email: userData.email,
           },
-        ];
-  };
+          {
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
+        console.log('Registration response:', response.data);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          this.error = error.response?.data?.message || 'Registration failed';
+        } else {
+          this.error = 'An unexpected error occurred';
+        }
+      }
+    },
 
-  const demoUsers = ref<User[]>(loadUsers());
-  const currentUser = ref<User | null>(JSON.parse(localStorage.getItem('currentUser') || 'null'));
-  const isAuthenticated = ref(!!localStorage.getItem('isAuthenticated'));
+    logout() {
+      this.token = null;
+      this.user = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    },
 
-  const saveUsers = () => {
-    localStorage.setItem('users', JSON.stringify(demoUsers.value));
-  };
+    initializeAuth() {
+      const token = localStorage.getItem('token');
+      const user = localStorage.getItem('user');
 
-  const register = (name: string, email: string, password: string) => {
-    const emailExists = demoUsers.value.some((user) => user.email === email);
-    if (emailExists) {
-      throw new Error('Email already exists');
-    }
-
-    const newUser: User = {
-      id: demoUsers.value.length + 1,
-      name,
-      email,
-      password,
-    };
-
-    demoUsers.value.push(newUser);
-    currentUser.value = newUser;
-    isAuthenticated.value = true;
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
-    localStorage.setItem('isAuthenticated', 'true');
-    saveUsers();
-    return newUser;
-  };
-
-  const login = (email: string, password: string) => {
-    const user = demoUsers.value.find((user) => user.email === email && user.password === password);
-
-    if (user) {
-      currentUser.value = user;
-      isAuthenticated.value = true;
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      localStorage.setItem('isAuthenticated', 'true');
-      return user;
-    }
-
-    return null;
-  };
-
-  const logout = () => {
-    currentUser.value = null;
-    isAuthenticated.value = false;
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('isAuthenticated');
-  };
-
-  return {
-    demoUsers,
-    currentUser,
-    isAuthenticated,
-    register,
-    login,
-    logout,
-  };
+      if (token && user) {
+        this.token = token;
+        this.user = JSON.parse(user);
+      }
+    },
+  },
 });
