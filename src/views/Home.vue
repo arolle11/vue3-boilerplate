@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-8 p-6 w-full min-h-screen">
-    <h1 class="text-2xl font-bold">{{ t('dashboard.title') }} {{ user?.name }}!</h1>
+    <h1 class="text-2xl font-bold">{{ t('dashboard.title') }} {{ user?.username }}!</h1>
 
     <div class="flex flex-col md:flex-row gap-6 w-full h-[400px] md:h-[45vh]">
       <div class="flex-1 h-full min-h-[200px]">

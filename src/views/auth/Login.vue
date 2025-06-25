@@ -228,8 +228,7 @@
       isSubmitting.value = true;
       loginError.value = '';
       await authStore.login(form.value);
-      console.log('Login successful');
-      //router.push('/home');
+      router.push('/home');
     } catch {
       loginError.value = 'Invalid username or password';
     } finally {

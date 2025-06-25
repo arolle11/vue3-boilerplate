@@ -2,12 +2,12 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 
 import type { User } from '@/types/user';
-import router from '@/router';
 
 interface AuthState {
   user: User | null;
   token: string | null;
   error: string | null;
+  _initialized: boolean;
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -15,16 +15,16 @@ export const useAuthStore = defineStore('auth', {
     user: null,
     token: null,
     error: null,
+    _initialized: false,
   }),
   getters: {
     isAuthenticated: (state) => !!state.token,
     currentUser: (state) => state.user,
+    isInitialized: (state) => state._initialized,
   },
   actions: {
     async login(credentials: { username: string; password: string }) {
       this.error = null;
-      // const router = useRouter();
-      console.log('Login response:', credentials);
       try {
         const response = await axios.post(
           `${import.meta.env.VITE_API_BASE_URL}/user/login`,
@@ -37,18 +37,17 @@ export const useAuthStore = defineStore('auth', {
           }
         );
 
-        this.token = response.data.token;
+        this.token = response.data.accessToken;
         this.user = response.data;
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('token', response.data.accessToken);
         localStorage.setItem('user', JSON.stringify(response.data));
-        router.push({ path: '/home' });
       } catch (error) {
-        console.error('Login error:', error);
         if (axios.isAxiosError(error)) {
           this.error = error.response?.data?.message || 'Login failed';
         } else {
           this.error = 'An unexpected error occurred';
         }
+        throw error;
       }
     },
 
@@ -67,7 +66,6 @@ export const useAuthStore = defineStore('auth', {
             headers: { 'Content-Type': 'application/json' },
           }
         );
-        console.log('Registration response:', response.data);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           this.error = error.response?.data?.message || 'Registration failed';
@@ -92,6 +90,7 @@ export const useAuthStore = defineStore('auth', {
         this.token = token;
         this.user = JSON.parse(user);
       }
+      this._initialized = true;
     },
   },
 });
